@@ -1,0 +1,444 @@
+* commit da176d9b1d8adcb2dcb55d4eb7a97d53ed2fa256
+| Author: winest <winestwinest@gmail.com>
+| Date:   Thu Apr 2 20:55:18 2020 +0800
+| 
+|     [vim]
+|       1. Update eclipse LSP version
+| 
+| roles/vim/files/.vimrc
+| 
+* commit 8d0d58164e259a0115a00bb009fabab38416127e
+| Author: winest <winestwinest@gmail.com>
+| Date:   Mon Feb 10 22:51:06 2020 +0800
+| 
+|     [vim]
+|         1. Fix vimdiff link not created bug
+| 
+| roles/vim/handlers/main.yml
+| roles/vim/tasks/main.yml
+| 
+* commit 58adb0d81566ced5d97995bba0171deb522b2d63
+| Author: winest <winestwinest@gmail.com>
+| Date:   Sat Feb 1 11:40:50 2020 +0800
+| 
+|     [common]
+|         1. Disable the creation of python bytecode by default
+|     
+|     [libevent]
+|         1. Upgrade to 2.1.11
+|     
+|     [llvm]
+|         1. Upgrade to 9.0.1
+|     
+|     [cfe]
+|         1. Upgrade to 9.0.1
+|     
+|     [vim]
+|         1. Upgrade to 8.2.0148
+|         2. Add java and lua support in vimrc
+|         3. Upgrade vim-plug
+|     
+|     [tmux]
+|         1. Upgrade to 3.0a
+|     
+|     [global]
+|         1. Upgrade to 6.6.4
+| 
+| roles/cfe/files/cfe-8.0.0.src.tar.xz
+| roles/cfe/files/cfe-9.0.1.src.tar.xz
+| roles/common/files/.gitconfig
+| roles/common/files/Ubuntu/.bashrc
+| roles/common/vars/Ubuntu.yml
+| roles/global/files/global-6.6.2.tar.gz
+| roles/global/files/global-6.6.4.tar.gz
+| roles/libevent/files/libevent-2.1.11-stable.tar.gz
+| roles/libevent/files/libevent-2.1.8-stable.tar.gz
+| roles/llvm/files/llvm-8.0.0.src.tar.xz
+| roles/llvm/files/llvm-9.0.1.src.tar.xz
+| roles/tmux/files/tmux-2.9a.tar.gz
+| roles/tmux/files/tmux-3.0a.tar.gz
+| roles/tmux/files/tpm-20180520.tar.gz
+| roles/tmux/files/tpm-20200126.tar.gz
+| roles/tmux/handlers/main.yml
+| roles/vim/files/.vimrc
+| roles/vim/files/plug-20200126.vim
+| roles/vim/files/vim-8.1.1700.tar.gz
+| roles/vim/files/vim-8.2.0148.tar.gz
+| roles/vim/handlers/main.yml
+| run_self.sh
+| 
+* commit ab73cce2ba7122c66030def7c55d07091e50d0bf
+| Author: winest <winestwinest@gmail.com>
+| Date:   Tue Jul 23 23:24:11 2019 +0800
+| 
+|     Add initial support for Mac OS X. Doesn't have good way to get cmake
+|     path installed by brew yet.
+| 
+| roles/common/files/CentOS/.bashrc
+| roles/common/files/MacOSX/.bashrc
+| roles/common/files/Ubuntu/.bashrc
+| roles/common/tasks/main.yml
+| roles/common/vars/MacOSX.yml
+| roles/samba/tasks/main.yml
+| roles/vim/handlers/main.yml
+| 
+* commit 789cc99c36f0f28b7888dbd90fd4727599a02259
+| Author: winest <winestwinest@gmail.com>
+| Date:   Tue Jul 16 09:51:27 2019 +0800
+| 
+|     [tmux]
+|     1. Update to 2.9a
+|     2. Update .tmux.conf style to use the latest syntax
+|     
+|     [vim]
+|     1. Update to 8.1.1700
+|     
+|     [.bashrc]
+|     1. Fix a problem sometimes back/Home key remove a byte when displaying
+| 
+| roles/common/files/.bashrc
+| roles/tmux/files/.tmux.conf
+| roles/tmux/files/tmux-2.8.tar.gz
+| roles/tmux/files/tmux-2.9a.tar.gz
+| roles/vim/files/vim-8.1.1099.tar.gz
+| roles/vim/files/vim-8.1.1700.tar.gz
+| roles/vim/handlers/main.yml
+| 
+* commit 0d0ea2dd18d300041321d5a011cc698e1c2bb793
+| Author: winest <winestwinest@gmail.com>
+| Date:   Tue Apr 9 14:55:22 2019 +0800
+| 
+|     [llvm]
+|     1. Update to 8.0.0
+|     
+|     [cfe]
+|     1. Update to 8.0.0
+|     
+|     [vim]
+|     1. Update to 8.1.1099
+|     2. Update script to grep vim version
+| 
+| roles/cfe/files/cfe-7.0.1.src.tar.xz
+| roles/cfe/files/cfe-8.0.0.src.tar.xz
+| roles/llvm/files/llvm-7.0.1.src.tar.xz
+| roles/llvm/files/llvm-8.0.0.src.tar.xz
+| roles/vim/files/.vimrc
+| roles/vim/files/vim-8.1.1004.tar.gz
+| roles/vim/files/vim-8.1.1099.tar.gz
+| 
+* commit c009e2e3df50c08009f1d3cf0098ddfccebf8582
+| Author: winest <winestwinest@gmail.com>
+| Date:   Sun Mar 10 23:58:26 2019 +0800
+| 
+|     vim:
+|         1. Update vim to 8.1.1004
+|         2. Update vim-plug
+|         3. Automatic rename tmux window name when editing file in vim
+| 
+| roles/common/files/.gitconfig
+| roles/common/tasks/main.yml
+| roles/common/vars/CentOS.yml
+| roles/common/vars/Ubuntu.yml
+| roles/samba/tasks/main.yml
+| roles/vim/files/.vimrc
+| roles/vim/files/plug-20181104.vim
+| roles/vim/files/vim-8.1.0757.tar.gz
+| roles/vim/files/vim-8.1.1004.tar.gz
+| 
+* commit 44f0714d5bce16fc148bfa1205b89b644a6d31e3
+| Author: winest <winestwinest@gmail.com>
+| Date:   Sun Mar 10 22:29:29 2019 +0800
+| 
+|     General:
+|         1. Fix remote_home variable when logging as root
+|         2. Add use cmake3 as default cmake
+|         3. Update package layout to support both CentOS and Ubuntu
+|         4. Add test os_detect.yml
+|     
+|     llvm:
+|         1. Update to 7.0.1
+|     
+|     cfe:
+|         1. Update to 7.0.1
+|         2. Fix a bug clang is not compiled
+|     
+|     samba:
+|         1. Add to whitelist in both firewalld and ufw
+|     
+|     tmux:
+|         1. Add length limit to window's name
+| 
+| hosts
+| roles/YouCompleteMe/handlers/main.yml
+| roles/cfe/files/cfe-7.0.0.src.tar.xz
+| roles/cfe/files/cfe-7.0.1.src.tar.xz
+| roles/cfe/handlers/main.yml
+| roles/cfe/tasks/main.yml
+| roles/common/files/.bashrc
+| roles/common/tasks/main.yml
+| roles/common/vars/CentOS.yml
+| roles/common/vars/Ubuntu.yml
+| roles/llvm/files/llvm-7.0.0.src.tar.xz
+| roles/llvm/files/llvm-7.0.1.src.tar.xz
+| roles/llvm/handlers/main.yml
+| roles/samba/tasks/main.yml
+| roles/tmux/files/.tmux.conf
+| test/os_detect.yml
+| 
+* commit 394bb187fba2b1c44ca468a0fa043366535a8480
+| Author: winest <winestwinest@gmail.com>
+| Date:   Wed Jan 16 23:38:15 2019 +0800
+| 
+|     common:
+|         1. Update pkg-config search path
+|         2. Add python-devel and pip
+|     
+|     ncurse:
+|         1. Build both .a and .so
+|     
+|     tmux:
+|         1. Update .tmux.conf to enable mouse more generically
+| 
+| hosts
+| roles/cfe/tasks/main.yml
+| roles/common/files/.bashrc
+| roles/common/tasks/main.yml
+| roles/ncurses/handlers/main.yml
+| roles/samba/tasks/main.yml
+| roles/tmux/files/.tmux.conf
+| roles/vim/files/vim-8.1.0577.tar.gz
+| roles/vim/files/vim-8.1.0757.tar.gz
+| 
+* commit 1ad76ec6092337b90183cde1f5ba4492db4fc90a
+| Author: winest <winestwinest@gmail.com>
+| Date:   Tue Dec 18 09:29:45 2018 +0800
+| 
+|     1. Update llvm and clang to 7.0.0
+|     2. Update vim to 8.1.0577 to fix asyncomplete issue
+|     3. Update tmux to 2.8
+|     4. Update color theme to display changed text better
+|     5. Update default download path
+|     6. Update tmux config to create new window next to current window
+| 
+| roles/cfe/files/cfe-6.0.1.src.tar.xz
+| roles/cfe/files/cfe-7.0.0.src.tar.xz
+| roles/cfe/tasks/main.yml
+| roles/common/files/.gitconfig
+| roles/common/tasks/main.yml
+| roles/llvm/files/llvm-6.0.1.src.tar.xz
+| roles/llvm/files/llvm-7.0.0.src.tar.xz
+| roles/tmux/files/.tmux.conf
+| roles/tmux/files/tmux-2.7.tar.gz
+| roles/tmux/files/tmux-2.8.tar.gz
+| roles/vim/files/.vimrc
+| roles/vim/files/vim-8.1.0401.tar.gz
+| roles/vim/files/vim-8.1.0577.tar.gz
+| roles/vim/files/winest-colors.vim
+| 
+* commit dc80b3d5644cd4cdc65afb4728f58ba7b69be85e
+| Author: winest <winestwinest@gmail.com>
+| Date:   Mon Sep 17 12:36:55 2018 +0800
+| 
+|     Add shortcut for git submodule clone
+| 
+| roles/common/files/.gitconfig
+| roles/vim/files/vim-8.1.0374.tar.gz
+| 
+* commit ae6be017553ae6311501d99809cbfb4cfbb5a7dd
+| Author: winest <winestwinest@gmail.com>
+| Date:   Mon Sep 17 10:12:41 2018 +0800
+| 
+|     1. Create new tmux session in the current directory
+|     2. Save vim undo histroy to ~/.vim/undo
+|     3. Update vim and vim-plugged
+|     4. Some minor display refinement
+| 
+| roles/common/files/.bashrc
+| roles/common/files/.gitconfig
+| roles/global/files/.globalrc
+| roles/tmux/files/.tmux.conf
+| roles/vim/files/.vimrc
+| roles/vim/files/plug-20180912.vim
+| roles/vim/files/vim-8.1.0348.tar.gz
+| roles/vim/files/vim-8.1.0374.tar.gz
+| roles/vim/files/vim-8.1.0401.tar.gz
+| 
+* commit 6e59831cc75dfccd33fa0c94e26152bda49e728a
+| Author: winest <winestwinest@gmail.com>
+| Date:   Thu Sep 6 16:48:36 2018 +0800
+| 
+|     1. Refine auto-complete menu in vim
+|     2. Enable full mouse mode in vim
+|     3. Add :Hex command in vim to view file in hex
+|     4. Update color theme to handle Visual selection
+| 
+| hosts
+| roles/common/files/.gitconfig
+| roles/common/tasks/main.yml
+| roles/tmux/files/.tmux.conf
+| roles/vim/files/.vimrc
+| roles/vim/files/get_latest.sh
+| roles/vim/files/vim-8.1.0289.tar.gz
+| roles/vim/files/vim-8.1.0348.tar.gz
+| roles/vim/files/winest-colors.vim
+| roles/vim/meta/main.yml
+| 
+* commit 055370459cc62bda2cf9937f801b6b7fe94411cf
+| Author: winest <winestwinest@gmail.com>
+| Date:   Sun Aug 19 13:07:12 2018 +0800
+| 
+|     1. Support mouse copy in tmux and vim
+|     2. Support vim yank to different sessions/instances
+|     3. Add Csv() function in vim to view file in csv mode
+| 
+| roles/common/files/.bashrc
+| roles/common/tasks/main.yml
+| roles/tmux/files/.tmux.conf
+| roles/vim/files/.vimrc
+| roles/vim/files/vim-8.1.0213.tar.gz
+| roles/vim/files/vim-8.1.0289.tar.gz
+| roles/vim/handlers/main.yml
+| self.yml
+| 
+* commit 298fe216c3ebeeb1d65b4cd6c79bc7c50b824525
+| Author: winest <winestwinest@gmail.com>
+| Date:   Thu Aug 9 15:16:43 2018 +0800
+| 
+|     1. Update YouCompleteMe
+|     2. Re-layout vimrc and some display
+| 
+| roles/YouCompleteMe/files/YouCompleteMe-20180710.tar.gz
+| roles/YouCompleteMe/files/YouCompleteMe-20180730.tar.gz
+| roles/vim/files/.vimrc
+| roles/vim/files/winest-colors.vim
+| run_self.sh
+| 
+* commit 9e01393e7bb2e5ef4f227c562c932b24ecdfcd9b
+| Author: winest <winestwinest@gmail.com>
+| Date:   Thu Jul 26 13:45:43 2018 +0800
+| 
+|     1. Update llvm and clang to 6.0.1 with extra tools
+|     2. Add default git config files
+|     3. Update vim to 8.1.0213
+| 
+| roles/cfe/files/cfe-6.0.0.src.tar.xz
+| roles/cfe/files/cfe-6.0.1.src.tar.xz
+| roles/common/files/.bashrc
+| roles/common/files/.git-completion.bash
+| roles/common/files/.gitconfig
+| roles/common/handlers/main.yml
+| roles/common/tasks/main.yml
+| roles/llvm/files/llvm-6.0.0.src.tar.xz
+| roles/llvm/files/llvm-6.0.1.src.tar.xz
+| roles/vim/files/.vimrc
+| roles/vim/files/vim-8.1.0173.tar.gz
+| roles/vim/files/vim-8.1.0213.tar.gz
+| roles/vim/files/winest-colors.vim
+| roles/vim/handlers/main.yml
+| roles/vim/tasks/main.yml
+| 
+* commit 9e20303b806de7a06d4a99bee633c9e460337044
+| Author: winest <winestwinest@gmail.com>
+| Date:   Tue Jul 10 14:48:06 2018 +0800
+| 
+|     1. Update vim and vim-plugged to latest version
+|     2. Add ignore list for Leaderf in vim
+|     3. Update YouCompleteMe to latest version
+| 
+| roles/YouCompleteMe/files/YouCompleteMe-20180525.tar.gz
+| roles/YouCompleteMe/files/YouCompleteMe-20180710.tar.gz
+| roles/common/files/.bashrc
+| roles/vim/files/.vimrc
+| roles/vim/files/plug-20180710.vim
+| roles/vim/files/vim-8.1.0022.tar.gz
+| roles/vim/files/vim-8.1.0173.tar.gz
+| 
+* commit 557039be5a4af714132dd94e817e52a2af3abf1c
+| Author: winest <winestwinest@gmail.com>
+| Date:   Fri May 25 19:38:23 2018 +0800
+| 
+|     1. YouCompleteMe: Update to latest version
+|     2. .vimrc: Add vim-fugitive
+| 
+| roles/YouCompleteMe/README.md
+| roles/YouCompleteMe/files/.ycm_extra_conf.py
+| roles/YouCompleteMe/files/YouCompleteMe-20180525.tar.gz
+| roles/YouCompleteMe/files/get_latest.sh
+| roles/YouCompleteMe/handlers/main.yml
+| roles/YouCompleteMe/meta/main.yml
+| roles/YouCompleteMe/tasks/main.yml
+| roles/common/tasks/main.yml
+| roles/vim/files/.vimrc
+| run_self.sh
+| self.yml
+| 
+* commit 4ad5d8bcdd4ef72a986d2b1f0b4be480002acbc5
+| Author: winest <winestwinest@gmail.com>
+| Date:   Thu May 24 22:47:14 2018 +0800
+| 
+|     [ansible-winest] Initial commit
+| 
+| .gitattributes
+| LICENSE
+| README.md
+| ansible.cfg
+| hosts
+| roles/cfe/README.md
+| roles/cfe/files/cfe-6.0.0.src.tar.xz
+| roles/cfe/handlers/main.yml
+| roles/cfe/meta/main.yml
+| roles/cfe/tasks/main.yml
+| roles/common/README.md
+| roles/common/files/.bashrc
+| roles/common/handlers/main.yml
+| roles/common/tasks/main.yml
+| roles/global/README.md
+| roles/global/files/.globalrc
+| roles/global/files/global-6.6.2.tar.gz
+| roles/global/handlers/main.yml
+| roles/global/meta/main.yml
+| roles/global/tasks/main.yml
+| roles/libevent/README.md
+| roles/libevent/files/libevent-2.1.8-stable.tar.gz
+| roles/libevent/handlers/main.yml
+| roles/libevent/meta/main.yml
+| roles/libevent/tasks/main.yml
+| roles/llvm/README.md
+| roles/llvm/files/llvm-6.0.0.src.tar.xz
+| roles/llvm/handlers/main.yml
+| roles/llvm/meta/main.yml
+| roles/llvm/tasks/main.yml
+| roles/ncurses/README.md
+| roles/ncurses/files/ncurses-6.1.tar.gz
+| roles/ncurses/handlers/main.yml
+| roles/ncurses/meta/main.yml
+| roles/ncurses/tasks/main.yml
+| roles/samba/README.md
+| roles/samba/tasks/main.yml
+| roles/tmux/README.md
+| roles/tmux/files/.tmux.conf
+| roles/tmux/files/tmux-2.7.tar.gz
+| roles/tmux/files/tpm-20180520.tar.gz
+| roles/tmux/handlers/main.yml
+| roles/tmux/meta/main.yml
+| roles/tmux/tasks/main.yml
+| roles/vim/README.md
+| roles/vim/files/.vimrc
+| roles/vim/files/plug-20180520.vim
+| roles/vim/files/vim-8.1.0022.tar.gz
+| roles/vim/handlers/main.yml
+| roles/vim/meta/main.yml
+| roles/vim/tasks/main.yml
+| run_self.sh
+| self.yml
+| test/dynamic_sudo.yml
+| test/test.yml
+| test/vars_when_sudo_or_not.yml
+| 
+* commit b87ab54e511c59fd6426c222352ab3bc945c1afd
+  Author: winest <winestwinest@gmail.com>
+  Date:   Thu May 24 00:12:28 2018 +0800
+  
+      Initial commit
+  
+  LICENSE
