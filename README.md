@@ -6,7 +6,7 @@ setup development environment.
 
 
 
-###Main features:
+### Main features:
 - Wrap all frequently-used tasks to different roles.
 - Support install to system or user's personal directory.
 - Won't download the same file twice if it's already exist on target directory.
