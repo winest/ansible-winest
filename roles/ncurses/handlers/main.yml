@@ -1,0 +1,22 @@
+---
+- name: ncurses - Decompress
+  unarchive:
+    src: "{{ remote_files_public_dir }}/{{ find_ncurses_result.stdout | basename }}"
+    dest: "{{ remote_files_public_dir }}"
+    remote_src: yes
+
+- name: ncurses - Build
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_ncurses_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+  with_items:
+    - "./configure --prefix='{{ remote_install_dir }}' --with-normal --with-shared --enable-pc-files"
+    - "make -j{{ ansible_processor_vcpus }}"
+
+- name: ncurses - Install
+  become: "{{ sudo_install }}"
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_ncurses_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+  with_items:
+    - "make install"

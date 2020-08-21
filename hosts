@@ -1,0 +1,63 @@
+[all:vars]
+#sudo_available controls whether call yum, apt-get, etc.
+#sudo_install controls whether install to remote_install_dir by sudo
+sudo_available=no
+sudo_install=no
+
+local_home="{{ lookup('env','HOME') }}"
+ansible_ssh_user="winest"
+ansible_ssh_private_key_file="{{ local_home }}/.ssh/id_rsa"
+ansible_ssh_pass=""
+
+remote_home="{{ ansible_user_dir }}"
+remote_files_dir="{{ remote_home }}/.ansible/winest/downloaded"
+remote_files_public_dir="{{ remote_files_dir }}/public"
+remote_files_private_dir="{{ remote_files_dir }}/private"
+remote_install_dir="{{ remote_home }}/.ansible/winest/installed"
+
+############################################################
+
+[self:vars]
+sudo_available=yes
+sudo_install=yes
+
+#It's good to set remote_files_public_dir to a common location
+#when remote_install_dir is used by everyone
+#so that the same file won't be downloaded and installed again
+remote_files_public_dir="/var/.ansible/downloaded/public"
+remote_install_dir="/usr/local"
+
+[self]
+#Be aware that ansible_connection=local always use current user name
+localhost          ansible_connection=local
+
+[tester:vars]
+sudo_available=yes
+sudo_install=yes
+remote_files_public_dir="/var/ansible/downloaded/public"
+remote_install_dir="/usr/local"
+ansible_ssh_user=tester
+ansible_ssh_pass=testertester
+
+[tester]
+localhost-tester   ansible_connection=local
+
+############################################################
+
+[shared_hosts-winest:vars]
+sudo_available=yes
+sudo_install=no
+
+[shared_hosts-winest]
+shared_host_1      ansible_host=192.168.1.101
+shared_host_2      ansible_host=192.168.1.102
+
+############################################################
+
+[production:vars]
+ansible_ssh_user=prod
+ansible_ssh_private_key_file={{ local_home }}/.ssh/prod
+
+[production]
+production_host_1  ansible_host=1.1.1.1 ansible_port=12345
+production_host_2  ansible_host=1.1.1.1 ansible_port=12346

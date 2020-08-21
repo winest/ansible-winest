@@ -1,0 +1,30 @@
+---
+- name: clang - Decompress
+  unarchive:
+    src: "{{ remote_files_public_dir }}/{{ find_clang_result.stdout | basename }}"
+    dest: "{{ remote_files_public_dir }}"
+    remote_src: yes
+
+- name: clang - Create build directory
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_clang_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+  with_items:
+    - "rm -rf build"
+    - "mkdir -p build"
+
+- name: clang - Build
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_clang_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}/build"
+  with_items:
+    - "cmake3 .. -DCMAKE_INSTALL_PREFIX='{{ remote_install_dir }}' -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH='{{ remote_install_dir }}'"
+    - "make -j{{ ansible_processor_vcpus }}"
+
+- name: clang - Install
+  become: "{{ sudo_install }}"
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_clang_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}/build"
+  with_items:
+    - "make install"

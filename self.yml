@@ -1,0 +1,9 @@
+---
+- hosts: "self" 
+  roles:
+    - common
+    - tmux
+    - global
+    - vim
+    - samba
+

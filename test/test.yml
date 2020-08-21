@@ -1,0 +1,11 @@
+---
+- hosts: "tester"
+  tasks:
+    - name: testing
+      become: yes
+      command: "whoami"
+      register: cmd_out
+
+    - debug:
+        var: cmd_out
+

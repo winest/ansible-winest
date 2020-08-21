@@ -1,0 +1,80 @@
+---
+- name: vim - Decompress
+  unarchive:
+    src: "{{ remote_files_public_dir }}/{{ find_vim_result.stdout | basename }}"
+    dest: "{{ remote_files_public_dir }}"
+    remote_src: yes
+
+- name: vim - Build
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_vim_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}/src"
+  with_items:
+    - "./configure --prefix='{{ remote_install_dir }}' --enable-pythoninterp=yes --enable-python3interp=yes --with-features=huge --with-x=yes --enable-gui=auto --disable-darwin"
+    - "make -j{{ ansible_processor_vcpus }}"
+
+- name: vim - Install
+  become: "{{ sudo_install }}"
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_vim_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}/src"
+  with_items:
+    - make install
+
+- name: vim - Create vimdiff link
+  become: yes
+  file:
+    src: "/usr/bin/diff"
+    dest: "{{ remote_install_dir }}/share/vim/vim82diff"
+    state: link
+  when: "sudo_available | bool"
+
+############################################################
+
+- name: vim-plug - Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ remote_home }}/.vim/autoload"
+    - "{{ remote_home }}/.vim/plugged"
+
+- name: vim-plug - Copy 
+  copy:
+    src: "{{ remote_files_private_dir }}/{{ find_vim_plug_result.stdout | basename }}"
+    dest: "{{ remote_home }}/.vim/autoload/plug.vim"
+    remote_src: yes
+
+############################################################
+
+- name: winest-colors.vim - Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ remote_home }}/.vim/colors"
+
+- name: winest-colors.vim - Copy 
+  copy:
+    src: "{{ remote_files_private_dir }}/winest-colors.vim"
+    dest: "{{ remote_home }}/.vim/colors/winest-colors.vim"
+    remote_src: yes
+
+############################################################
+
+- name: .vimrc - Copy 
+  copy:
+    src: "{{ remote_files_private_dir }}/.vimrc"
+    dest: "{{ remote_home }}/.vimrc"
+    remote_src: yes
+
+- name: .vimrc - Update home
+  replace:
+    path: "{{ remote_home }}/.vimrc"
+    regexp: "/home/winest"
+    replace: "{{ remote_home }}"
+
+- name: .vimrc - Install plugins by vim-plug
+  command: "{{ item }}"
+  with_items:
+    - "{{ remote_install_dir }}/bin/vim +'PlugInstall --sync' +qa"

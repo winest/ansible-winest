@@ -1,0 +1,78 @@
+---
+- name: YouCompleteMe - Remove
+  file:
+    path: "{{ remote_home }}/.vim/plugged/YouCompleteMe"
+    state: absent
+
+- name: YouCompleteMe - Decompress
+  unarchive:
+    src: "{{ remote_files_private_dir }}/{{ find_YouCompleteMe_result.stdout | basename }}"
+    dest: "{{ remote_files_private_dir }}"
+    remote_src: yes
+
+- name: YouCompleteMe - Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ remote_home }}/.vim/plugged"
+
+- name: YouCompleteMe - Copy
+  command: "cp -r \"{{ remote_files_private_dir }}/{{ find_YouCompleteMe_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}\" \"{{ remote_home }}/.vim/plugged/YouCompleteMe\""
+  #copy:
+  #  src: "{{ remote_files_private_dir }}/{{ find_YouCompleteMe_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+  #  dest: "{{ remote_home }}/.vim/plugged/YouCompleteMe"
+  #  remote_src: yes
+
+- name: YouCompleteMe - Create build directory for cpp
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_home }}/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp"
+  with_items:
+    - "rm -rf build"
+    - "mkdir -p build"
+
+- name: YouCompleteMe - Build cpp
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_home }}/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp/build"
+  with_items:
+    - "cmake3 . .. -DEXTERNAL_LIBCLANG_PATH='{{ remote_install_dir }}/lib/libclang.so'"
+    - "cmake3 --build . --target ycm_core --config Release -- -j{{ ansible_processor_vcpus }}"
+
+- name: YouCompleteMe - Create build directory for cregex
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_home }}/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/cregex"
+  with_items:
+    - "rm -rf build"
+    - "mkdir -p build"
+
+- name: YouCompleteMe - Build cregex
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_home }}/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/cregex/build"
+  with_items:
+    - "cmake3 . .."
+    - "cmake3 --build . --target _regex --config Release -- -j{{ ansible_processor_vcpus }}"
+
+- name: YouCompleteMe - Install
+  lineinfile:
+    path: "{{ remote_home }}/.vimrc"
+    regexp: "^\"(\\s*Plug.+YouCompleteMe.*)$"
+    line: "\\1"
+    backrefs: yes
+
+############################################################
+
+- name: .ycm_extra_conf.py - Copy
+  copy:
+    src: "{{ remote_files_private_dir }}/.ycm_extra_conf.py"
+    dest: "{{ remote_home }}/.ycm_extra_conf.py"
+    remote_src: yes
+
+- name: .ycm_extra_conf.py - Update home
+  replace:
+    path: "{{ remote_home }}/.ycm_extra_conf.py"
+    regexp: "/home/winest"
+    replace: "{{ remote_home }}"

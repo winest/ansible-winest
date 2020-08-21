@@ -1,0 +1,34 @@
+---
+- name: global - Get name
+  local_action: command find "{{ role_path }}/files/" -name "global-*.tar.*"
+  register: find_global_result
+
+- name: global
+  block:
+    - name: global - Download
+      copy:
+        src: "{{ find_global_result.stdout }}"
+        dest: "{{ remote_files_public_dir }}/{{ find_global_result.stdout | basename }}"
+      notify:
+        - global - Decompress
+        - global - Build
+        - global - Install
+  always:
+    - meta: flush_handlers
+    - name: global - Clean
+      file:
+        path: "{{ remote_files_public_dir }}/{{ find_global_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+        state: absent
+
+############################################################
+
+- name: .globalrc
+  block:
+    - name: .globalrc - Download
+      copy:
+        src: "{{ role_path }}/files/.globalrc" 
+        dest: "{{ remote_files_private_dir }}/.globalrc"
+      notify:
+        - .globalrc - Copy 
+  always:
+    - meta: flush_handlers

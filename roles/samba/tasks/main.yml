@@ -1,0 +1,49 @@
+---
+- name: samba - Install
+  become: "{{ sudo_install }}"
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - "samba"
+    - "samba-common"
+  when: "sudo_available | bool"
+
+############################################################
+
+- name: Check if firewalld Exists
+  shell: "if systemctl status 'firewalld' | grep -q 'enabled'; then echo true; else echo false; fi;"
+  register: firewalld_exists
+
+- name: Check if ufw Exists
+  shell: "if systemctl status 'ufw' | grep -q 'enabled'; then echo true; else echo false; fi;"
+  register: ufw_exists
+
+- name: samba - Add to firewalld
+  become: yes
+  firewalld:
+    service: "samba"
+    permanent: yes
+    immediate: yes
+    state: "enabled"
+  when: "firewalld_exists | bool and sudo_available | bool"
+
+- name: samba - Add to ufw
+  become: yes
+  ufw:
+    name: "samba"
+    rule: "allow"
+    state: "reloaded"
+  when: "ufw_exists | bool and sudo_available | bool"
+
+- name: samba - Add to SELinux
+  become: yes
+  seboolean:
+    name: "{{ item }}"
+    state: yes
+    persistent: yes
+  with_items:
+    - "samba_enable_home_dirs"
+    - "samba_export_all_ro"
+    - "samba_export_all_rw"
+  when: "sudo_available | bool and ansible_selinux | bool"

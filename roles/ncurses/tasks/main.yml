@@ -1,0 +1,21 @@
+---
+- name: ncurses - Get name
+  local_action: command find "{{ role_path }}/files/" -name "ncurses-*.tar.*"
+  register: find_ncurses_result
+
+- name: ncurses
+  block:
+    - name: ncurses - Download
+      copy:
+        src: "{{ find_ncurses_result.stdout }}"
+        dest: "{{ remote_files_public_dir }}/{{ find_ncurses_result.stdout | basename }}"
+      notify:
+        - ncurses - Decompress
+        - ncurses - Build
+        - ncurses - Install
+  always:
+    - meta: flush_handlers
+    - name: ncurses - Clean
+      file:
+        path: "{{ remote_files_public_dir }}/{{ find_ncurses_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+        state: absent

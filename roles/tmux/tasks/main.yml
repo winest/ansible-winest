@@ -1,0 +1,60 @@
+---
+- name: tmux - Get name
+  local_action: command find "{{ role_path }}/files/" -name "tmux-*.tar.*"
+  register: find_tmux_result
+
+- name: tmux
+  block:
+    - name: tmux - Download
+      copy:
+        src: "{{ find_tmux_result.stdout }}"
+        dest: "{{ remote_files_public_dir }}/{{ find_tmux_result.stdout | basename }}"
+      notify:
+        - tmux - Decompress
+        - tmux - Build
+        - tmux - Install
+  always:
+    - meta: flush_handlers
+    - name: tmux - Clean
+      file:
+        path: "{{ remote_files_public_dir }}/{{ find_tmux_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+        state: absent
+
+
+############################################################
+
+- name: tpm - Get name
+  local_action: command find "{{ role_path }}/files/" -name "tpm-*.tar.*"
+  register: find_tpm_result
+
+- name: tpm
+  block:
+    - name: tpm - Download
+      copy:
+        src: "{{ find_tpm_result.stdout }}"
+        dest: "{{ remote_files_private_dir }}/{{ find_tpm_result.stdout | basename }}"
+      notify:
+        - tpm - Remove
+        - tpm - Decompress
+        - tpm - Create directories
+        - tpm - Copy
+  always:
+    - meta: flush_handlers
+    - name: tpm - Clean
+      file:
+        path: "{{ remote_files_private_dir }}/{{ find_tpm_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+        state: absent
+
+############################################################
+
+- name: .tmux.conf
+  block:
+    - name: .tmux.conf - Download
+      copy:
+        src: "{{ role_path }}/files/.tmux.conf"
+        dest: "{{ remote_files_private_dir }}/.tmux.conf"
+      notify:
+        - .tmux.conf - Copy
+        - .tmux.conf - Install plugins by tpm
+  always:
+    - meta: flush_handlers

@@ -1,0 +1,38 @@
+---
+common_update_repos:
+  - "centos-release-scl"
+  - "https://centos7.iuscommunity.org/ius-release.rpm"
+
+common_basic_pkgs:
+  - "autoconf"
+  - "automake"
+  - "make"
+  - "cmake3"
+  - "git"
+  - "git-lfs"
+  - "devtoolset-8"
+  - "devtoolset-8-libatomic-devel"
+  - "python-devel"
+  - "python-pip"
+  - "python36u-devel"
+  - "python36u-pip"
+  - "wget"
+  - "jq"
+  - "mlocate"
+  - "the_silver_searcher"
+  - "libXt-devel"
+  - "libX11-devel"
+  - "xorg-x11-xauth"
+  - "xorg-x11-fonts-*"
+  - "xorg-x11-utils"
+  - "xsel"
+  - "htop"
+  - "iftop"
+  - "nethogs"
+  - "iotop"
+  - "traceroute"
+  - "perf"
+
+common_links:
+  - { src: "/usr/bin/pip3.6" , dest: "{{ remote_install_dir }}/bin/pip3" }
+

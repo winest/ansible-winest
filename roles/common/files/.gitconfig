@@ -1,0 +1,43 @@
+[apply]
+	whitespace = nowarn
+[color]
+	ui = true
+[core]
+	eol = lf
+	autocrlf = input
+	editor = vim
+	excludesfile = ~/.gitignore
+[diff]
+	tool = vimdiff
+[merge]
+	tool = vimdiff
+[mergetool]
+	trustExitCode = true
+[alias]
+	st = status
+	br = branch
+	co = checkout
+	sw = switch
+	rs = restore
+	cm = commit
+	cp = cherry-pick
+	fp = format-patch
+	ap = apply
+	di = diff
+	dc = diff --cached
+	rb = rebase
+	pu = pull
+	pr = pull --rebase
+	dt = difftool
+	mt = mergetool
+	cl = clone
+	cr = clone --recurse-submodules
+	sm = submodule
+	su = submodule update
+	lo = log --graph --name-only
+	lo2 = log --graph -p
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

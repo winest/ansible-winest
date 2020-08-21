@@ -1,0 +1,30 @@
+---
+- name: global - Decompress
+  unarchive:
+    src: "{{ remote_files_public_dir }}/{{ find_global_result.stdout | basename }}"
+    dest: "{{ remote_files_public_dir }}"
+    remote_src: yes
+
+- name: global - Build
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_global_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+  with_items:
+    - "./configure --prefix='{{ remote_install_dir }}'"
+    - "make -j{{ ansible_processor_vcpus }}"
+
+- name: global - Install
+  become: "{{ sudo_install }}"
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_global_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+  with_items:
+    - "make install"
+
+############################################################
+
+- name: .globalrc - Copy 
+  copy:
+    src: "{{ remote_files_private_dir }}/.globalrc"
+    dest: "{{ remote_home }}/.globalrc"
+    remote_src: yes

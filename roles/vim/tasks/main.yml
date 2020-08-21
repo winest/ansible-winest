@@ -1,0 +1,69 @@
+---
+- name: vim - Get name
+  local_action: command find "{{ role_path }}/files/" -name "vim-*.tar.*"
+  register: find_vim_result
+
+- name: vim
+  block:
+    - name: vim - Download
+      copy:
+        src: "{{ find_vim_result.stdout }}"
+        dest: "{{ remote_files_public_dir }}/{{ find_vim_result.stdout | basename }}"
+      notify:
+        - vim - Decompress
+        - vim - Build
+        - vim - Install
+        - vim - Create vimdiff link
+  always:
+    - meta: flush_handlers
+    - name: vim - Clean
+      file:
+        path: "{{ remote_files_public_dir }}/{{ find_vim_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+        state: absent
+
+############################################################
+
+- name: vim-plug - Get name
+  local_action: command find "{{ role_path }}/files/" -name "plug-*.vim"
+  register: find_vim_plug_result
+
+- name: vim-plug
+  block:
+    - name: vim-plug - Download
+      copy:
+        src: "{{ find_vim_plug_result.stdout }}"
+        dest: "{{ remote_files_private_dir }}/{{ find_vim_plug_result.stdout | basename }}"
+      notify:
+        - vim-plug - Create directories
+        - vim-plug - Copy 
+  always:
+    - meta: flush_handlers
+
+############################################################
+
+- name: winest-colors.vim
+  block:
+    - name: winest-colors.vim - Download
+      copy:
+        src: "winest-colors.vim"
+        dest: "{{ remote_files_private_dir }}/winest-colors.vim"
+      notify:
+        - winest-colors.vim - Create directories
+        - winest-colors.vim - Copy 
+  always:
+    - meta: flush_handlers
+
+############################################################
+
+- name: .vimrc
+  block:
+    - name: .vimrc - Download
+      copy:
+        src: "{{ role_path }}/files/.vimrc"
+        dest: "{{ remote_files_private_dir }}/.vimrc"
+      notify:
+        - .vimrc - Copy 
+        - .vimrc - Update home 
+        - .vimrc - Install plugins by vim-plug
+  always:
+    - meta: flush_handlers

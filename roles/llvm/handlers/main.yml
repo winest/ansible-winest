@@ -1,0 +1,30 @@
+---
+- name: llvm - Decompress
+  unarchive:
+    src: "{{ remote_files_public_dir }}/{{ find_llvm_result.stdout | basename }}"
+    dest: "{{ remote_files_public_dir }}"
+    remote_src: yes
+
+- name: llvm - Create build directory
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_llvm_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+  with_items:
+    - "rm -rf build"
+    - "mkdir -p build"
+
+- name: llvm - Build
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_llvm_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}/build"
+  with_items:
+    - "cmake3 .. -DCMAKE_INSTALL_PREFIX='{{ remote_install_dir }}' -DCMAKE_BUILD_TYPE=Release"
+    - "make -j{{ ansible_processor_vcpus }}"
+
+- name: llvm - Install
+  become: "{{ sudo_install }}"
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_llvm_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}/build"
+  with_items:
+    - "make install"

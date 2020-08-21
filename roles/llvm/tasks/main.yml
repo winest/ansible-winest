@@ -1,0 +1,22 @@
+---
+- name: llvm - Get name
+  local_action: command find "{{ role_path }}/files/" -name "llvm-*.tar.*"
+  register: find_llvm_result
+
+- name: llvm
+  block:
+    - name: llvm - Download
+      copy:
+        src: "{{ find_llvm_result.stdout }}"
+        dest: "{{ remote_files_public_dir }}/{{ find_llvm_result.stdout | basename }}"
+      notify:
+        - llvm - Decompress
+        - llvm - Create build directory
+        - llvm - Build
+        - llvm - Install
+  always:
+    - meta: flush_handlers
+    - name: llvm - Clean
+      file:
+        path: "{{ remote_files_public_dir }}/{{ find_llvm_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+        state: absent

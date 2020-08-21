@@ -1,0 +1,22 @@
+---
+- name: clang - Get name
+  local_action: command find "{{ role_path }}/files/" -name "clang-*.tar.*"
+  register: find_clang_result
+
+- name: clang
+  block:
+    - name: clang - Download
+      copy:
+        src: "{{ find_clang_result.stdout }}"
+        dest: "{{ remote_files_public_dir }}/{{ find_clang_result.stdout | basename }}"
+      notify:
+        - clang - Decompress
+        - clang - Create build directory
+        - clang - Build
+        - clang - Install
+  always:
+    - meta: flush_handlers
+    - name: clang - Clean
+      file:
+        path: "{{ remote_files_public_dir }}/{{ find_clang_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+        state: absent

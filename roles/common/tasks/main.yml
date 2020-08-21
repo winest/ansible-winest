@@ -1,0 +1,123 @@
+---
+- name: Gather OS specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+  tags: vars
+
+############################################################
+
+- name: Ensure config is reasonable
+  fail:
+    msg: "sudo_install is true while sudo_available is false"
+  when: "(sudo_install | bool) and not (sudo_available | bool)"
+
+- name: Creates common directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ remote_install_dir }}"
+    - "{{ remote_install_dir }}/bin"
+    - "{{ remote_files_dir }}"
+
+- name: Creates public directories
+  become: "{{ sudo_available }}"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0777
+  with_items:
+    - "{{ remote_files_public_dir }}"
+
+- name: Creates private directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0700
+  with_items:
+    - "{{ remote_files_private_dir }}"
+
+############################################################
+
+- name: Update repositories
+  become: "{{ sudo_install }}"
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ common_update_repos }}"
+  when: "sudo_available | bool and common_update_repos | length > 0"
+
+############################################################
+
+- name: Basic packages
+  become: "{{ sudo_install }}"
+  package:
+    name: "{{ common_basic_pkgs }}"
+    state: latest
+  when: "sudo_available | bool"
+
+- name: Create link
+  become: yes
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  with_items: "{{ common_links }}"
+  when: "sudo_available | bool and common_links | length > 0"
+
+############################################################
+
+- name: Basic python packages
+  become: yes
+  pip: name={{ item }}
+  with_items:
+    - "tabview"
+  when: "sudo_available | bool"
+
+############################################################
+
+- name: .gitconfig
+  block:
+    - name: .gitconfig - Download
+      copy:
+        src: "{{ role_path }}/files/.gitconfig"
+        dest: "{{ remote_files_private_dir }}/.gitconfig"
+      notify:
+        - .gitconfig - Copy
+  always:
+    - meta: flush_handlers
+
+############################################################
+
+- name: .git-completion.bash
+  block:
+    - name: .git-completion.bash - Download
+      copy:
+        src: "{{ role_path }}/files/.git-completion.bash"
+        dest: "{{ remote_files_private_dir }}/.git-completion.bash"
+      notify:
+        - .git-completion.bash - Copy
+  always:
+    - meta: flush_handlers
+
+############################################################
+
+- name: Disable bell in .inputrc
+  shell: "if grep '-qs' 'set bell-style none' {{ remote_home }}/.inputrc; then echo 'Already exists'; else echo 'set bell-style none' >> {{ remote_home }}/.inputrc; fi;"
+
+############################################################
+
+- name: .bashrc
+  block:
+    - name: .bashrc - Download
+      copy:
+        src: "{{ role_path }}/files/{{ ansible_distribution }}/.bashrc"
+        dest: "{{ remote_files_private_dir }}/.bashrc"
+      notify:
+        - .bashrc - Copy
+        - .bashrc - Update home
+        - .bashrc - Update install path
+  always:
+    - meta: flush_handlers

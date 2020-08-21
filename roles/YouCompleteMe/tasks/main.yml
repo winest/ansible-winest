@@ -1,0 +1,41 @@
+---
+- name: YouCompleteMe - Get name
+  local_action: command find "{{ role_path }}/files/" -name "YouCompleteMe-*.tar.*"
+  register: find_YouCompleteMe_result
+
+- name: YouCompleteMe
+  block:
+    - name: YouCompleteMe - Download
+      copy:
+        src: "{{ find_YouCompleteMe_result.stdout }}"
+        dest: "{{ remote_files_private_dir }}/{{ find_YouCompleteMe_result.stdout | basename }}"
+      notify:
+        - YouCompleteMe - Remove 
+        - YouCompleteMe - Decompress
+        - YouCompleteMe - Create directories
+        - YouCompleteMe - Copy 
+        - YouCompleteMe - Create build directory for cpp
+        - YouCompleteMe - Build cpp
+        - YouCompleteMe - Create build directory for cregex
+        - YouCompleteMe - Build cregex
+        - YouCompleteMe - Install
+  always:
+    - meta: flush_handlers
+    - name: YouCompleteMe - Clean
+      file:
+        path: "{{ remote_files_private_dir }}/{{ find_YouCompleteMe_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+        state: absent
+      
+############################################################
+
+- name: .ycm_extra_conf.py
+  block:
+    - name: .ycm_extra_conf.py - Download
+      copy:
+        src: "{{ role_path }}/files/.ycm_extra_conf.py"
+        dest: "{{ remote_files_private_dir }}/.ycm_extra_conf.py"
+      notify:
+        - .ycm_extra_conf.py - Copy
+        - .ycm_extra_conf.py - Update home
+  always:
+    - meta: flush_handlers

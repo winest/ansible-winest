@@ -1,0 +1,62 @@
+---
+- name: tmux - Decompress
+  unarchive:
+    src: "{{ remote_files_public_dir }}/{{ find_tmux_result.stdout | basename }}"
+    dest: "{{ remote_files_public_dir }}"
+    remote_src: yes
+
+- name: tmux - Build
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_tmux_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+  with_items:
+    - "./configure --prefix='{{ remote_install_dir }}' CFLAGS='-I{{ remote_install_dir }}/include -I{{ remote_install_dir }}/include/ncurses' LDFLAGS='-L{{ remote_install_dir }}/lib'"
+    - "make -j{{ ansible_processor_vcpus }}"
+
+- name: tmux - Install
+  become: "{{ sudo_install }}"
+  command: "{{ item }}"
+  args:
+    chdir: "{{ remote_files_public_dir }}/{{ find_tmux_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+  with_items:
+    - "make install"
+
+############################################################
+
+- name: tpm - Remove 
+  file:
+    path: "{{ remote_home }}/.tmux/plugins/tpm"
+    state: absent
+
+- name: tpm - Decompress 
+  unarchive:
+    src: "{{ remote_files_private_dir }}/{{ find_tpm_result.stdout | basename }}"
+    dest: "{{ remote_files_private_dir }}"
+    remote_src: yes
+
+- name: tpm - Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ remote_home }}/.tmux/plugins"
+
+- name: tpm - Copy
+  command: "cp -r \"{{ remote_files_private_dir }}/{{ find_tpm_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}\" \"{{ remote_home }}/.tmux/plugins/tpm\""
+  #copy:
+  #  src: "{{ remote_files_private_dir }}/{{ find_tpm_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
+  #  dest: "{{ remote_home }}/.tmux/plugins/tpm"
+  #  remote_src: yes
+
+############################################################
+
+- name: .tmux.conf - Copy
+  copy:
+    src: "{{ remote_files_private_dir }}/.tmux.conf"
+    dest: "{{ remote_home }}/.tmux.conf"
+    remote_src: yes
+    
+- name: .tmux.conf - Install plugins by tpm
+  command: "{{ item }}"
+  with_items:
+    - "{{ remote_home }}/.tmux/plugins/tpm/scripts/install_plugins.sh"
