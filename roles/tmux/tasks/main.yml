@@ -47,15 +47,15 @@
 
 ############################################################
 
-- name: .tmux.conf
+- name: tmux.conf
   block:
-    - name: .tmux.conf - Download
+    - name: tmux.conf - Download
       copy:
-        src: "{{ role_path }}/files/.tmux.conf"
-        dest: "{{ remote_files_private_dir }}/.tmux.conf"
+        src: "{{ role_path }}/files/tmux.conf"
+        dest: "{{ remote_files_private_dir }}/tmux.conf"
       notify:
-        - .tmux.conf - Create directories
-        - .tmux.conf - Copy
-        - .tmux.conf - Install plugins by tpm
+        - tmux.conf - Create directories
+        - tmux.conf - Copy
+        - tmux.conf - Install plugins by tpm
   always:
     - meta: flush_handlers

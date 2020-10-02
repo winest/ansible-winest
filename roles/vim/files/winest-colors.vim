@@ -33,6 +33,12 @@ hi Float          guifg=#800000 guibg=NONE guisp=#FF0000 gui=NONE ctermfg=1 cter
 "SpecialChar      special character in a constant
 hi Special        guifg=#808000 guibg=NONE guisp=#FF0000 gui=NONE ctermfg=1 ctermbg=NONE cterm=NONE
 hi SpecialChar    guifg=#808000 guibg=NONE guisp=#FF0000 gui=NONE ctermfg=1 ctermbg=NONE cterm=NONE
+hi ExtraWhiteSpace guifg=NONE guibg=#808000 guisp=#FF0000 gui=NONE ctermfg=NONE ctermbg=1 cterm=NONE
+match ExtraWhiteSpace /\s\+$/
+autocmd BufWinEnter * match ExtraWhiteSpace /\s\+$/
+autocmd InsertEnter * match ExtraWhiteSpace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhiteSpace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
 
 "Identifier       any variable name
 "Function         function name (also  methods for classes)

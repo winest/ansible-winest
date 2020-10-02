@@ -29,14 +29,15 @@ Plug 'mhinz/vim-startify'
 let g:startify_change_to_dir = 0
 let g:startify_session_persistence = 1
 let g:startify_custom_header = [
-        \ '                     _                 __           ',
-        \ '           _      __(_)___  ___  _____/ /_          ',
-        \ '          | | /| / / / __ \/ _ \/ ___/ __/          ',
-        \ '          | |/ |/ / / / / /  __(__  ) /_            ',
-        \ '          |__/|__/_/_/ /_/\___/____/\__/            ',
-        \ '                                                    ',
-        \ '                               VIM ' . s:vim_version . ' ',
-        \ '                                                    ',
+        \ '----------------------------------------------------',
+        \ '|                    _                 __          |',
+        \ '|          _      __(_)___  ___  _____/ /_         |',
+        \ '|         | | /| / / / __ \/ _ \/ ___/ __/         |',
+        \ '|         | |/ |/ / / / / /  __(__  ) /_           |',
+        \ '|         |__/|__/_/_/ /_/\___/____/\__/           |',
+        \ '|                                                  |',
+        \ '|                              VIM ' . s:vim_version . '        |',
+        \ '----------------------------------------------------',
         \ ]
 let g:startify_skiplist = [
         \ 'Build', 'build', 'Output', 'output', 'Intermediate', 'intermediate', 'third_party', 'VisualGDB',
@@ -105,7 +106,7 @@ inoremap <expr> <S-Tab> pumvisible() ? '<C-P>' : '<S-Tab>'
 inoremap <expr> <CR>    pumvisible() ? '<C-Y>' : '<C-G>u<CR>'
 let g:asyncomplete_auto_popup = 1
 "let g:asyncomplete_smart_completion = 1
-"let g:asyncomplete_log_file = '/home/winest/asyncomplete.tmp'
+"let g:asyncomplete_log_file = '/home/winest/asyncomplete.log'
 "let g:asyncomplete_remove_duplicates = 1
 
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
@@ -121,10 +122,11 @@ Plug 'prabirshrestha/vim-lsp'
 let g:lsp_signs_enabled = 1
 let g:lsp_diagnostics_echo_cursor = 1
 "let g:lsp_async_completion = 0
+"let g:lsp_log_file = expand('/home/winest/vim-lsp.log')
 
-autocmd FileType python,java            nnoremap <buffer> <C-F> :LspReferences<CR>
-autocmd FileType cpp,python,java,lua    nnoremap <buffer> <F12> :LspDefinition<CR>
-autocmd FileType cpp,python,java,lua    nnoremap <buffer> <C-F12> :LspDefinition<CR>
+autocmd FileType java,python            nnoremap <buffer> <C-F> :LspReferences<CR>
+autocmd FileType cpp,java,lua,python    nnoremap <buffer> <F12> :LspDefinition<CR>
+autocmd FileType cpp,java,lua,python    nnoremap <buffer> <C-F12> :LspDefinition<CR>
 
 if executable( 'clangd' )
     autocmd User lsp_setup call lsp#register_server({
@@ -154,13 +156,13 @@ endif
 
 "mkdir -p ~/.vim/eclipse.jdt.ls
 "cd ~/.vim/eclipse.jdt.ls
-"wget http://download.eclipse.org/jdtls/milestones/0.52.0/jdt-language-server-0.52.0-202003042214.tar.gz
-"tar jdt-language-server-0.52.0-202003042214.tar.gz
-if executable('java') && filereadable(expand('~/.vim/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.5.700.v20200207-2156.jar'))
+"wget http://download.eclipse.org/jdtls/milestones/0.62.0/jdt-language-server-0.62.0-202009291815.tar.gz"
+"tar -zxvf jdt-language-server-0.62.0-202009291815.tar.gz
+if executable( 'java' ) && filereadable( expand('~/.vim/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.5.800.v20200727-1323.jar') )
     autocmd User lsp_setup call lsp#register_server({
             \ 'name': 'eclipse.jdt.ls',
             \ 'cmd': {server_info->[
-            \     'java',
+            \     '/usr/lib/jvm/java-11-openjdk-amd64/bin/java',
             \     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
             \     '-Dosgi.bundles.defaultStartLevel=4',
             \     '-Declipse.product=org.eclipse.jdt.ls.core.product',
@@ -169,18 +171,23 @@ if executable('java') && filereadable(expand('~/.vim/eclipse.jdt.ls/plugins/org.
             \     '-Dfile.encoding=UTF-8',
             \     '-Xmx1G',
             \     '-jar',
-            \     expand('~/.vim/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.5.700.v20200207-2156.jar'),
+            \     expand('~/.vim/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.5.800.v20200727-1323.jar'),
             \     '-configuration',
             \     expand('~/.vim/eclipse.jdt.ls/config_linux'),
             \     '-data',
             \     expand('~/.vim/eclipse.jdt.ls/projects/' . fnamemodify(getcwd(), ':t'))
             \ ]},
+            \ 'root_uri': {server_info->lsp#utils#path_to_uri(
+            \	lsp#utils#find_nearest_parent_file_directory(
+            \		lsp#utils#get_buffer_path(),
+            \		['.git/', 'build.gradle', 'pom.xml']
+            \	))},
             \ 'whitelist': ['java'],
             \ })
 endif
 
 "luarocks install --server=http://luarocks.org/dev lua-lsp
-if executable('lua-lsp')
+if executable( 'lua-lsp' )
     autocmd User lsp_setup call lsp#register_server({
             \ 'name': 'lua-lsp',
             \ 'cmd': {server_info->[&shell, &shellcmdflag, 'lua-lsp']},
@@ -224,8 +231,11 @@ nnoremap <F7> :cprevious<CR>
 nnoremap <F8> :cnext<CR>
 
 filetype plugin indent on
+autocmd FileType cpp  setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType java setlocal ts=4 sts=4 sw=4 expandtab
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 set tabstop=4
+set softtabstop=4
 set shiftwidth=4
 set expandtab
 set pastetoggle=<F2>
@@ -234,7 +244,7 @@ set guioptions-=T
 set completeopt-=preview
 set completeopt-=menu
 set completeopt^=menuone,longest "Display auto-complete even only one possible match
-set clipboard^=unnamedplus       "Use the same clipbaord like Ctrl+C Ctrl+V 
+set clipboard^=unnamedplus       "Use the same clipbaord like Ctrl+C Ctrl+V
 set showcmd                      "Display current commands
 set wildmenu                     "Show possible vim commands in vim command mode
 set cursorline                   "Highlight current line
@@ -268,7 +278,7 @@ if ( &t_Co > 2 || has('gui_running') )
     set hlsearch
 endif
 set background=dark             "Default is light
-colorscheme winest-colors 
+colorscheme winest-colors
 
 
 
@@ -301,7 +311,7 @@ if !exists( ':Csv' )
     function! s:Csv()
         let path = expand( '%:p' )
         if executable( 'tabview' )
-            silent execute '!tabview ' . path 
+            silent execute '!tabview ' . path
         else
             silent execute '!cat ' . path . '| sed -e "s/,,/, ,/g" | column -s, -t | less -\#5 -N -S'
         endif
@@ -329,7 +339,7 @@ if !exists( ':Hex' )
             let b:oldbin=&bin
             "Set new options
             setlocal binary " make sure it overrides any textwidth, etc.
-            silent :e " this will reload the file without trickeries 
+            silent :e " this will reload the file without trickeries
                       "(DOS line endings will be shown entirely )
             let &ft="xxd"
             "Set status

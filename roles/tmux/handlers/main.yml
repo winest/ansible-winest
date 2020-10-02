@@ -50,20 +50,20 @@
 
 ############################################################
 
-- name: .tmux.conf - Create directories
+- name: tmux.conf - Create directories
   file:
     path: "{{ item }}"
     state: directory
   with_items:
     - "{{ remote_home }}/.config/tmux"
 
-- name: .tmux.conf - Copy
+- name: tmux.conf - Copy
   copy:
-    src: "{{ remote_files_private_dir }}/.tmux.conf"
+    src: "{{ remote_files_private_dir }}/tmux.conf"
     dest: "{{ remote_home }}/.config/tmux/tmux.conf"
     remote_src: yes
     
-- name: .tmux.conf - Install plugins by tpm
+- name: tmux.conf - Install plugins by tpm
   command: "{{ item }}"
   with_items:
     - "{{ remote_home }}/.tmux/plugins/tpm/scripts/install_plugins.sh"
