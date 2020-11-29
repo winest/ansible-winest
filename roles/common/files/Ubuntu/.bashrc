@@ -29,6 +29,7 @@ alias cls="clear"
 alias ls="ls --color"
 alias ll="ls -alh --color"
 alias grep="grep --color"
+alias rl="readlink -f"
 
 export PS1="\[\e[0;31m\]\u\[\e[m\]@\[\e[0;35m\]\h\[\e[m\]:\[\e[0;32m\]\W >\[\e[m\]"
 export LS_COLORS="di=1;34:st=1;34:ow=1;34:tw=1;34:fi=0:ex=32:mi=0:or=31:ln=31:pi=5:so=5:bd=5:cd=5:*.sh=32"

@@ -29,8 +29,9 @@ alias cls="clear"
 alias ls="ls -G"
 alias ll="ls -alhG"
 alias grep="grep --color"
-alias updatedb="sudo gupdatedb"
+alias updatedb="gupdatedb"
 alias locate="glocate"
+alias rl="greadlink -f"
 
 export PS1="\[\e[0;31m\]\u\[\e[m\]@\[\e[0;35m\]\h\[\e[m\]:\[\e[0;32m\]\W >\[\e[m\]"
 export CLICOLOR=1

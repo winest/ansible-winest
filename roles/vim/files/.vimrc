@@ -80,12 +80,22 @@ let g:cpp_experimental_simple_template_highlight = 1
 Plug 'pearofducks/ansible-vim'
 
 "============================================================
+"
+Plug 'udalov/kotlin-vim'
+
+"============================================================
 
 Plug 'majutsushi/tagbar'
 nnoremap <F4> :TagbarToggle<CR>
 let g:tagbar_autoclose = 1
 let g:tagbar_sort = 1
 let g:tagbar_vertical = 10
+
+"============================================================
+
+Plug 'hsanson/vim-android'
+"let g:gradle_path = '/home/winest/.gradle/wrapper/dists/gradle-6.3-all/b4awcolw9l59x95tu1obfh9i8/gradle-6.3/'
+"let g:android_sdk_path = '/usr/local/pkg/android-sdk25/'
 
 "============================================================
 
@@ -124,9 +134,9 @@ let g:lsp_diagnostics_echo_cursor = 1
 "let g:lsp_async_completion = 0
 "let g:lsp_log_file = expand('/home/winest/vim-lsp.log')
 
-autocmd FileType java,python            nnoremap <buffer> <C-F> :LspReferences<CR>
-autocmd FileType cpp,java,lua,python    nnoremap <buffer> <F12> :LspDefinition<CR>
-autocmd FileType cpp,java,lua,python    nnoremap <buffer> <C-F12> :LspDefinition<CR>
+autocmd FileType dockerfile,java,kotlin,python,yaml            nnoremap <buffer> <C-F> :LspReferences<CR>
+autocmd FileType cpp,dockerfile,java,kotlin,lua,python,yaml    nnoremap <buffer> <F12> :LspDefinition<CR>
+autocmd FileType cpp,dockerfile,java,kotlin,lua,python,yaml    nnoremap <buffer> <C-F12> :LspDefinition<CR>
 
 if executable( 'clangd' )
     autocmd User lsp_setup call lsp#register_server({
@@ -177,14 +187,26 @@ if executable( 'java' ) && filereadable( expand('~/.vim/eclipse.jdt.ls/plugins/o
             \     '-data',
             \     expand('~/.vim/eclipse.jdt.ls/projects/' . fnamemodify(getcwd(), ':t'))
             \ ]},
-            \ 'root_uri': {server_info->lsp#utils#path_to_uri(
-            \	lsp#utils#find_nearest_parent_file_directory(
-            \		lsp#utils#get_buffer_path(),
-            \		['.git/', 'build.gradle', 'pom.xml']
-            \	))},
             \ 'whitelist': ['java'],
             \ })
 endif
+
+"mkdir -p  ~/.vim/kotlin-language-server
+"cd ~/.vim/kotlin-language-server
+"wget https://github.com/fwcd/kotlin-language-server/releases/download/0.7.0/server.zip
+"unzip server.zip
+if executable(expand( '~/.vim/kotlin-language-server/server/bin/kotlin-language-server') )
+    autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'kotlin-language-server',
+        \ 'cmd': {server_info->[
+        \     &shell,
+        \     &shellcmdflag,
+        \     expand('~/.vim/kotlin-language-server/server/bin/kotlin-language-server')
+        \ ]},
+        \ 'whitelist': ['kotlin']
+        \ })
+endif
+
 
 "luarocks install --server=http://luarocks.org/dev lua-lsp
 if executable( 'lua-lsp' )
@@ -195,6 +217,36 @@ if executable( 'lua-lsp' )
             \ })
 endif
 
+"npm install --global dockerfile-language-server-nodejs
+if executable( 'docker-langserver' )
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'docker-langserver',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'docker-langserver --stdio']},
+        \ 'whitelist': ['dockerfile'],
+        \ })
+endif
+
+"npm install --global yaml-language-server
+if executable( 'yaml-language-server' )
+  augroup LspYaml
+   autocmd!
+   autocmd User lsp_setup call lsp#register_server({
+       \ 'name': 'yaml-language-server',
+       \ 'cmd': {server_info->['yaml-language-server', '--stdio']},
+       \ 'whitelist': ['yaml', 'yaml.ansible'],
+       \ 'workspace_config': {
+       \   'yaml': {
+       \     'validate': v:true,
+       \     'hover': v:true,
+       \     'completion': v:true,
+       \     'customTags': [],
+       \     'schemas': {},
+       \     'schemaStore': { 'enable': v:true },
+       \   }
+       \ }
+       \})
+  augroup END
+endif
 "============================================================
 
 Plug 'aceofall/gtags.vim'
