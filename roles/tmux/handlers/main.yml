@@ -23,12 +23,12 @@
 
 ############################################################
 
-- name: tpm - Remove 
+- name: tpm - Remove
   file:
     path: "{{ remote_home }}/.tmux/plugins/tpm"
     state: absent
 
-- name: tpm - Decompress 
+- name: tpm - Decompress
   unarchive:
     src: "{{ remote_files_private_dir }}/{{ find_tpm_result.stdout | basename }}"
     dest: "{{ remote_files_private_dir }}"
@@ -62,7 +62,7 @@
     src: "{{ remote_files_private_dir }}/tmux.conf"
     dest: "{{ remote_home }}/.config/tmux/tmux.conf"
     remote_src: yes
-    
+
 - name: tmux.conf - Install plugins by tpm
   command: "{{ item }}"
   with_items:

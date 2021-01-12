@@ -1,5 +1,5 @@
 ---
-common_update_repos: 
+common_update_repos:
   - "software-properties-common"
 
 common_basic_pkgs:
@@ -30,8 +30,9 @@ common_basic_pkgs:
   - "traceroute"
   - "linux-tools-generic"
   - "less"
+  - "glibc-source"
 
-common_links: 
+common_links:
   - { src: "/usr/local/bin/cmake" , dest: "{{ remote_install_dir }}/bin/cmake3" }
 
 

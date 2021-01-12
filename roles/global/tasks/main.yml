@@ -26,9 +26,9 @@
   block:
     - name: .globalrc - Download
       copy:
-        src: "{{ role_path }}/files/.globalrc" 
+        src: "{{ role_path }}/files/.globalrc"
         dest: "{{ remote_files_private_dir }}/.globalrc"
       notify:
-        - .globalrc - Copy 
+        - .globalrc - Copy
   always:
     - meta: flush_handlers

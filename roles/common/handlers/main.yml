@@ -1,5 +1,5 @@
 ---
-- name: .gitconfig - Copy 
+- name: .gitconfig - Copy
   copy:
     src: "{{ remote_files_private_dir }}/.gitconfig"
     dest: "{{ remote_home }}/.gitconfig"
@@ -7,7 +7,7 @@
 
 ############################################################
 
-- name: .git-completion.bash - Copy 
+- name: .git-completion.bash - Copy
   copy:
     src: "{{ remote_files_private_dir }}/.git-completion.bash"
     dest: "{{ remote_home }}/.git-completion.bash"
@@ -15,7 +15,18 @@
 
 ############################################################
 
-- name: .bashrc - Copy 
+- name: .bashrc - Check exist
+  stat:
+    path: "{{ remote_home }}/.bashrc"
+  register: find_bashrc_result
+
+- name: .bashrc - Backup if exist
+  copy:
+    src: "{{ remote_home }}/.bashrc"
+    dest: "{{ remote_home }}/.bashrc-{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}"
+  when: find_bashrc_result.stat.exists
+
+- name: .bashrc - Copy
   copy:
     src: "{{ remote_files_private_dir }}/.bashrc"
     dest: "{{ remote_home }}/.bashrc"

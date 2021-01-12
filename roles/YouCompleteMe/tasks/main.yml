@@ -10,10 +10,10 @@
         src: "{{ find_YouCompleteMe_result.stdout }}"
         dest: "{{ remote_files_private_dir }}/{{ find_YouCompleteMe_result.stdout | basename }}"
       notify:
-        - YouCompleteMe - Remove 
+        - YouCompleteMe - Remove
         - YouCompleteMe - Decompress
         - YouCompleteMe - Create directories
-        - YouCompleteMe - Copy 
+        - YouCompleteMe - Copy
         - YouCompleteMe - Create build directory for cpp
         - YouCompleteMe - Build cpp
         - YouCompleteMe - Create build directory for cregex
@@ -25,7 +25,7 @@
       file:
         path: "{{ remote_files_private_dir }}/{{ find_YouCompleteMe_result.stdout | basename | regex_replace('(.+)\\.tar.*', '\\1') }}"
         state: absent
-      
+
 ############################################################
 
 - name: .ycm_extra_conf.py

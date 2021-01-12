@@ -35,7 +35,7 @@
         dest: "{{ remote_files_private_dir }}/{{ find_vim_plug_result.stdout | basename }}"
       notify:
         - vim-plug - Create directories
-        - vim-plug - Copy 
+        - vim-plug - Copy
   always:
     - meta: flush_handlers
 
@@ -49,7 +49,7 @@
         dest: "{{ remote_files_private_dir }}/winest-colors.vim"
       notify:
         - winest-colors.vim - Create directories
-        - winest-colors.vim - Copy 
+        - winest-colors.vim - Copy
   always:
     - meta: flush_handlers
 
@@ -62,8 +62,8 @@
         src: "{{ role_path }}/files/.vimrc"
         dest: "{{ remote_files_private_dir }}/.vimrc"
       notify:
-        - .vimrc - Copy 
-        - .vimrc - Update home 
+        - .vimrc - Copy
+        - .vimrc - Update home
         - .vimrc - Install plugins by vim-plug
   always:
     - meta: flush_handlers

@@ -39,7 +39,7 @@
     - "{{ remote_home }}/.vim/autoload"
     - "{{ remote_home }}/.vim/plugged"
 
-- name: vim-plug - Copy 
+- name: vim-plug - Copy
   copy:
     src: "{{ remote_files_private_dir }}/{{ find_vim_plug_result.stdout | basename }}"
     dest: "{{ remote_home }}/.vim/autoload/plug.vim"
@@ -54,7 +54,7 @@
   with_items:
     - "{{ remote_home }}/.vim/colors"
 
-- name: winest-colors.vim - Copy 
+- name: winest-colors.vim - Copy
   copy:
     src: "{{ remote_files_private_dir }}/winest-colors.vim"
     dest: "{{ remote_home }}/.vim/colors/winest-colors.vim"
@@ -62,7 +62,7 @@
 
 ############################################################
 
-- name: .vimrc - Copy 
+- name: .vimrc - Copy
   copy:
     src: "{{ remote_files_private_dir }}/.vimrc"
     dest: "{{ remote_home }}/.vimrc"

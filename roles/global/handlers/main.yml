@@ -23,7 +23,7 @@
 
 ############################################################
 
-- name: .globalrc - Copy 
+- name: .globalrc - Copy
   copy:
     src: "{{ remote_files_private_dir }}/.globalrc"
     dest: "{{ remote_home }}/.globalrc"

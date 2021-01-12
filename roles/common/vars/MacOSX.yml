@@ -1,5 +1,5 @@
 ---
-common_update_repos: [] 
+common_update_repos: []
 
 common_basic_pkgs:
   - "autoconf"
@@ -22,7 +22,7 @@ common_basic_pkgs:
   - "gnu-tar"
   - "coreutils"
 
-common_links: 
+common_links:
   - { src: "/usr/local/Cellar/cmake/3.15.0/bin/cmake" , dest: "{{ remote_install_dir }}/bin/cmake3" }
   - { src: "/usr/local/bin/pip3" , dest: "{{ remote_install_dir }}/bin/pip" }
 
