@@ -116,6 +116,8 @@
         src: "{{ role_path }}/files/{{ ansible_distribution }}/.bashrc"
         dest: "{{ remote_files_private_dir }}/.bashrc"
       notify:
+        - .bashrc - Check exist
+        - .bashrc - Backup if exist
         - .bashrc - Copy
         - .bashrc - Update home
         - .bashrc - Update install path

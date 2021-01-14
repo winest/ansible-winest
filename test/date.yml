@@ -1,0 +1,10 @@
+---
+- hosts: "tester"
+  tasks:
+    - debug:
+        msg: "ansible_date_time = {{ ansible_date_time }}"
+    - debug:
+        msg: "ansible_date_time_YYMMDD = {{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}"
+    - debug:
+        msg: "ansible_date_time_HHMMSS = {{ ansible_date_time.hour }}{{ ansible_date_time.minute }}{{ ansible_date_time.second }}"
+
