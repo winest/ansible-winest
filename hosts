@@ -31,16 +31,31 @@ remote_install_dir="/usr/local"
 #Be aware that ansible_connection=local always use current user name
 localhost          ansible_connection=local
 
+############################################################
+
 [tester:vars]
 sudo_available=yes
 sudo_install=yes
-remote_files_public_dir="/var/ansible/downloaded/public"
+remote_files_public_dir="/var/.ansible/downloaded/public"
 remote_install_dir="/usr/local"
 ansible_ssh_user=tester
 ansible_ssh_pass=testertester
 
 [tester]
 localhost-tester   ansible_connection=local
+
+############################################################
+
+[normaluser:vars]
+sudo_available=no
+sudo_install=no
+remote_files_public_dir="/var/.ansible/downloaded/public"
+remote_install_dir="/usr/local"
+ansible_ssh_user=normaluser
+ansible_ssh_pass=normalpassword
+
+[normaluser]
+localhost-snotes   ansible_host=192.168.1.100
 
 ############################################################
 

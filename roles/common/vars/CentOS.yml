@@ -35,4 +35,3 @@ common_basic_pkgs:
 
 common_links:
   - { src: "/usr/bin/pip3.6" , dest: "{{ remote_install_dir }}/bin/pip3" }
-
