@@ -104,7 +104,7 @@
 
 ############################################################
 
-- name: Disable bell in .inputrc
+- name: .inputrc - Disable bell
   shell: "if grep '-qs' 'set bell-style none' {{ remote_home }}/.inputrc; then echo 'Already exists'; else echo 'set bell-style none' >> {{ remote_home }}/.inputrc; fi;"
 
 ############################################################
@@ -123,3 +123,15 @@
         - .bashrc - Update install path
   always:
     - meta: flush_handlers
+
+############################################################
+
+- name: /etc/updatedb.conf - Exclude /mnt
+  become: yes
+  shell: >
+    if grep '-qs' 'PRUNEPATHS=.*\/mnt' /etc/updatedb.conf; then
+      echo '/mnt already exists in /etc/updatedb.conf';
+    else
+      sed 's/PRUNEPATHS=\"\(.\+\)\"/PRUNEPATHS=\"\1 \/mnt\"/g' -i /etc/updatedb.conf;
+    fi;
+  when: "sudo_available | bool"
