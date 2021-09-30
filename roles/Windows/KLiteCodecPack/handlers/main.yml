@@ -1,0 +1,14 @@
+---
+- name: KLiteCodecPack - Install
+  become: "{{ sudo_install }}"
+  win_package:
+    path: "{{ remote_files_public_dir }}/{{ find_KLiteCodecPack_result.stdout | basename}}"
+    product_id: "KLiteCodecPack_is1"
+    arguments:
+      - /VERYSILENT
+      - /NORESTART
+      - /SUPPRESSMSGBOXES
+      - /FORCEUPGRADE
+      - /LOG="{{ remote_files_public_dir }}/{{ find_KLiteCodecPack_result.stdout | basename | regex_replace('(.+)\\.exe', '\\1.log')}}"
+      - /LOADINF="{{ remote_files_public_dir }}/K-LiteCodecPack.ini"
+      - /DIR="{{ remote_install_dir }}/K-LiteCodecPack"

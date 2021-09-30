@@ -1,0 +1,24 @@
+---
+- name: K-LiteCodecPack - Get name
+  local_action: command find "{{ role_path }}/files/" -name "K-LiteCodecPack-ver*(Mega).exe"
+  register: find_KLiteCodecPack_result
+
+- name: KLiteCodecPack
+  block:
+    - name: KLiteCodecPack.ini Download
+      win_copy:
+        src: "{{ role_path }}/files/K-LiteCodecPack.ini"
+        dest: "{{ remote_files_public_dir }}/K-LiteCodecPack.ini}}"
+
+    - name: KLiteCodecPack - Download
+      win_copy:
+        src: "{{ find_KLiteCodecPack_result.stdout }}"
+        dest: "{{ remote_files_public_dir }}/{{ find_KLiteCodecPack_result.stdout | basename }}"
+      notify:
+        - KLiteCodecPack - Install
+        #always:
+        #  - meta: flush_handlers
+        #  - name: KLiteCodecPack - Clean
+        #    file:
+        #      path: "{{ remote_files_public_dir }}/{{ find_KLiteCodecPack_result.stdout | basename }}"
+        #      state: absent

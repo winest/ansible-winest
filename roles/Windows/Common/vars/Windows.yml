@@ -1,0 +1,8 @@
+---
+common_basic_pkgs:
+  - "autoconf"
+  - "automake"
+  - "make"
+  - "cmake"
+  - "git"
+  - "git-lfs"

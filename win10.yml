@@ -1,0 +1,6 @@
+---
+- hosts: "win10"
+  become_method: runas
+  become_user: "{{ ansible_ssh_user }}"
+  roles:
+    - Windows/KLiteCodecPack

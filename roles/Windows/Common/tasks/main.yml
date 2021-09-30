@@ -1,0 +1,50 @@
+---
+- name: Gather OS specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  tags: vars
+
+############################################################
+
+- name: Ensure config is reasonable
+  fail:
+    msg: "sudo_install is true while sudo_available is false"
+  when: "(sudo_install | bool) and not (sudo_available | bool)"
+
+- name: Creates common directories
+  win_file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ remote_install_dir }}"
+    - "{{ remote_files_dir }}"
+
+- name: Creates public directories
+  become: "{{ sudo_available }}"
+  win_file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ remote_files_public_dir }}"
+
+- name: Creates private directories
+  win_file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ remote_files_private_dir }}"
+
+############################################################
+
+- name: .gitconfig
+  block:
+    - name: .gitconfig - Download
+      copy:
+        src: "{{ role_path }}/files/.gitconfig"
+        dest: "{{ remote_files_private_dir }}/.gitconfig"
+      notify:
+        - .gitconfig - Copy
+  always:
+    - meta: flush_handlers

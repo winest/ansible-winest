@@ -76,3 +76,15 @@ ansible_ssh_private_key_file={{ local_home }}/.ssh/prod
 [production]
 production_host_1  ansible_host=1.1.1.1 ansible_port=12345
 production_host_2  ansible_host=1.1.1.1 ansible_port=12346
+
+############################################################
+
+[win10:vars]
+sudo_available=yes
+sudo_install=yes
+ansible_ssh_user=hungb
+ansible_ssh_private_key_file="{{ local_home }}/.ssh/id_rsa"
+remote_install_dir="E:\\"
+
+[win10]
+host_1             ansible_host="{{ lookup('env','WSL_IF_IP') }}" ansible_connection=ssh ansible_shell_type=cmd
